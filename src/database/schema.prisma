@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String?
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @db.Timestamp(6)
+}
+
+model Message {
+  id         Int           @id @default(autoincrement())
+  content    String?
+  imageUrl   String?
+  senderId   Int
+  receiverId Int
+  status     MessageStatus @default(SENDING) // Enum type for message status
+  createdAt  DateTime      @default(now())
+}
+
+enum MessageStatus {
+  SENDING
+  SENT
+  DELIVERED
+  VIEWED
+}
